@@ -34,6 +34,7 @@ uv run gw2arcupd
 | `c` | Check  | Check for available updates         |
 | `u` | Update | Download and install the latest DLL |
 | `d` | Delete | Delete the existing d3d11.dll       |
+| `l` | Launch | Run GW2 via Steam                   |
 | `q` | Quit   | Exit the application                |
 
 

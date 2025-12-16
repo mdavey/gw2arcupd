@@ -1,4 +1,5 @@
 import hashlib
+import subprocess
 from pathlib import Path
 
 import httpx
@@ -8,6 +9,7 @@ from textual.widgets import Header, Footer, Button, Log
 
 DLL_URL = "https://www.deltaconnected.com/arcdps/x64/d3d11.dll"
 MD5_URL = "https://www.deltaconnected.com/arcdps/x64/d3d11.dll.md5sum"
+RUN_COMMAND = ["steam", "steam://rungameid/1284210"]
 
 def get_gw2_path() -> Path | None:
     if (Path.home() / ".steam" / "steam" / "steamapps" / "common" / "Guild Wars 2").exists():
@@ -60,6 +62,7 @@ class Gw2UpdApp(App):
         ("c", "check_for_update()", "Check"),
         ("u", "update()", "Update"),
         ("d", "disable()", "Delete"),
+        ("l", "launch()", "Launch"),
         ("q", "quit()", "Quit"),
     ]
 
@@ -96,6 +99,7 @@ class Gw2UpdApp(App):
                 Button("Check (C)", id="check"),
                 Button("Update (U)", id="update"),
                 Button("Delete (D)", id="disable"),
+                Button("Launch GW2 (L)", id="launch"),
                 Button("Quit (Q)", id="quit"),
                 classes="button_container"
             ),
@@ -104,7 +108,7 @@ class Gw2UpdApp(App):
 
     async def on_mount(self) -> None:
         self.title = "ArcDPS Updater"
-        self.sub_title = "v0.01"
+        self.sub_title = "v0.02"
         self.theme = "nord"
 
         path = get_gw2_path()
@@ -122,6 +126,8 @@ class Gw2UpdApp(App):
             await self.action_check_for_update()
         elif event.button.id == "quit":
             await self.action_quit()
+        elif event.button.id == "launch":
+            await self.action_launch()
 
     async def action_update(self):
         if not get_gw2_path():
@@ -165,6 +171,9 @@ class Gw2UpdApp(App):
             self.log_message(f"Update available")
         else:
             self.log_message(f"No update available, latest version already installed")
+
+    async def action_launch(self):
+        subprocess.run(RUN_COMMAND)
 
     def log_message(self, message: str) -> None:
         """Write a message to the Log widget."""
