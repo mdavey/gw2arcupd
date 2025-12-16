@@ -1,3 +1,5 @@
+#!/usr/bin/env -S uv run
+
 import hashlib
 import subprocess
 from pathlib import Path
@@ -180,8 +182,5 @@ class Gw2UpdApp(App):
         self.logger.write_line(message, True)
 
 
-def run() -> None:
-    Gw2UpdApp().run()
-
 if __name__ == "__main__":
-    run()
+    Gw2UpdApp().run()
